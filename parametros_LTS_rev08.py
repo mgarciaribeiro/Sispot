@@ -202,7 +202,7 @@ if blindagem == "2":
                                  '2 - Calcula raio para mesma área da blindagem (Default) \n'))
 
     if metodo_blindagem == 1:
-        r_3 = r_2 + d_f / 2
+        r_3 = r_2 + d_f
 
     else:
         area_s = math.pi * n_fios * (d_f / 2) ** 2
