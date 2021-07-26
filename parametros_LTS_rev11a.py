@@ -252,6 +252,8 @@ if blindagem == "2":
             r_3 = math.sqrt(area_s / math.pi + r_2 ** 2)
 
 else:
+    blindagem_dupla = 1
+    metodo_blindagem = 2
     e_s = (10 ** -2) * float(input('\nEntre com a espessura da blindagem metálica (considerada puramente tubular) em [cm]: '))
     r_3 = r_2 + e_s
 
