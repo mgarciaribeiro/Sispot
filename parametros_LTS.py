@@ -48,7 +48,7 @@ w__Y = dados.range('AA3:AA5').value                                             
 print(w__X, '\n', w__Y)
 
 w_uc = float(dados.range('U25').value)                                          # Entre com a permeabilidade magnética relativa do núcleo
-w_er = 50.0                                                                     # Perturbação
+w_er = 60.0                                                                     # Perturbação
 w_s1 = float(dados.range('U7').value) / 10                                      # Entre com a espessura da camada semicondutora entre núcleo e isolação [cm]
 w_xl = float(dados.range('U9').value) / 10                                      # Entre com a espessura da primeira camada isolante [cm]
 w_s2 = float(dados.range('U11').value) / 10                                     # Entre com a espessura da camada semicondutora entre isolação e blindagem [cm]
@@ -107,7 +107,7 @@ w_gu = float(dados.range('U40').value)                                          
 # print('Resistividade solo: ', w_gn)
 # print('Permeabilidade solo: ', w_gu)
 
-def solve_LTS(method = 'complete'):
+def solve_LTS(method = 2):
 
     # Entrada de dados
 
@@ -397,7 +397,7 @@ def solve_LTS(method = 'complete'):
     m_c = cmath.sqrt(w * u_c / p_c * 1j)
 
     # método de cálculo
-    mtd = '2' if method == 'complete' else '1'
+    mtd = '2' if method == 2 else '1'
 
     print('\nConsiderações sobre o cálculo de Z1 (Impedância interna do núcleo)')
     metodo_z1 = mtd
@@ -663,21 +663,38 @@ def solve_LTS(method = 'complete'):
     print('Impedancia de Sequencia zero da LT em ohm/km')
     print(f'Z_0 = {np.round(1000 * Z_012[0][0], 4)}')
 
+    dados.range('B21').value = str(1000 * Z_012[0][0]).replace('(', '').replace(')', '').replace('j', '').split('+')[0]
+    dados.range('C21').value = str(1000 * Z_012[0][0]).replace('(', '').replace(')', '').replace('j', '').split('+')[1]
+
     print('Impedancia de sequencia positiva da LT em ohm/km')
     print(f'Z_1 = {np.round(1000 * Z_012[1][1], 4)}')
+
+    dados.range('D21').value = str(1000 * Z_012[1][1]).replace('(', '').replace(')', '').replace('j', '').split('+')[0]
+    dados.range('E21').value = str(1000 * Z_012[1][1]).replace('(', '').replace(')', '').replace('j', '').split('+')[1]
 
     print('Impedancia de sequencia negativa da LT em ohm/km')
     print(f'Z_2 = {np.round(1000 * Z_012[2][2], 4)}')
 
+    dados.range('F21').value = str(1000 * Z_012[2][2]).replace('(', '').replace(')', '').replace('j', '').split('+')[0]
+    dados.range('G21').value = str(1000 * Z_012[2][2]).replace('(', '').replace(')', '').replace('j', '').split('+')[1]
 
     print('Admitancia de Sequencia zero da LT em micro mho/km')
     print(f'Y_0 = {np.round(10** 6 * 1000 * Y_012[0][0], 4)}')
 
+    dados.range('B24').value = str(1E9 * Y_012[0][0]).replace('(', '').replace(')', '').replace('j', '').split('+')[0]
+    dados.range('C24').value = str(1E9 * Y_012[0][0]).replace('(', '').replace(')', '').replace('j', '').split('+')[1]
+
     print('Admitancia de Sequencia positiva da LT em micro mho/km')
     print(f'Y_1 = {np.round(10** 6 * 1000 * Y_012[1][1], 4)}')
 
+    dados.range('D24').value = str(1E9 * Y_012[1][1]).replace('(', '').replace(')', '').replace('j', '').split('+')[0]
+    dados.range('E24').value = str(1E9 * Y_012[1][1]).replace('(', '').replace(')', '').replace('j', '').split('+')[1]
+
     print('Admitancia de Sequencia negativa da LT em micro mho/km')
     print(f'Y_2 = {np.round(10** 6 * 1000 * Y_012[2][2], 4)}')
+
+    dados.range('F24').value = str(1E9 * Y_012[2][2]).replace('(', '').replace(')', '').replace('j', '').split('+')[0]
+    dados.range('G24').value = str(1E9 * Y_012[2][2]).replace('(', '').replace(')', '').replace('j', '').split('+')[1]
 
     matriz_z_seq = pd.DataFrame(np.round(Z_012 * 1000, 5))
     matriz_y_seq = pd.DataFrame(np.round(Y_012 * 1000 * 10 ** 6, 5))
@@ -715,6 +732,21 @@ def solve_LTS(method = 'complete'):
               f'Posição Horizontal [m]: {X[0:N]} \n'
               f'Posição Vertical [m]: {Y[0:N]} \n'
               f'\nResistividade do solo Rho [ohm*m]: {p_solo} \n')
+        dados.range('D28').value = round(r_0, 5)
+        dados.range('D29').value = round(r_1, 5)
+        dados.range('D30').value = p_c
+        dados.range('D31').value = round(u_c / (4 * math.pi * 10 ** -7), 2)
+        dados.range('D32').value = round(u_1 / (4 * math.pi * 10 ** -7), 4)
+        dados.range('D33').value = round(e_1 / (8.85 * 10 ** -12), 2)
+
+        dados.range('G28').value = round(r_2, 5)
+        dados.range('G29').value = round(r_3, 5)
+        dados.range('G30').value = p_s
+        dados.range('G31').value = round(u_s / (4 * math.pi * 10 ** -7), 2)
+        dados.range('G32').value = round(u_2 / (4 * math.pi * 10 ** -7), 4)
+        dados.range('G33').value = round(e_2 / (8.85 * 10 ** -12), 2)
+
+        dados.range('G26').value = round(r_4, 5)
 
     matriz_z = '2'
     if matriz_z == "2":
