@@ -48,7 +48,7 @@ w__Y = dados.range('AA3:AA5').value                                             
 print(w__X, '\n', w__Y)
 
 w_uc = float(dados.range('U25').value)                                          # Entre com a permeabilidade magnética relativa do núcleo
-w_er = 60.0                                                                     # Perturbação
+w_er = 0.0                                                                      # Perturbação
 w_s1 = float(dados.range('U7').value) / 10                                      # Entre com a espessura da camada semicondutora entre núcleo e isolação [cm]
 w_xl = float(dados.range('U9').value) / 10                                      # Entre com a espessura da primeira camada isolante [cm]
 w_s2 = float(dados.range('U11').value) / 10                                     # Entre com a espessura da camada semicondutora entre isolação e blindagem [cm]
@@ -220,8 +220,10 @@ def solve_LTS(method = 2):
             # p = 1 / 100 * float(input(f'Iteração {n_iter} atingida sem convergência, digite a nova porcentagem de '
                                       # f'perturbação em p_c (iteração anterior = {100*p}%). \n'))
             # terminando o programa
-            print('Convergência não atingida para resistência em ohm/km, terminando o programa. Tente outra perturbação...')
-            exit()
+            # print('Convergência não atingida para resistência em ohm/km, terminando o programa. Tente outra perturbação...')
+            # exit()
+            # incrementa a perturbação até conseguir
+            p = p + 1
 
 
     print(f'Resistência em ohm/km calculada em {iter} iterações: {round(1000 * np.real(Z1), 5)}. \n'
